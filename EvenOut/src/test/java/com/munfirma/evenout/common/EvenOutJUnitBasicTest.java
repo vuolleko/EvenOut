@@ -21,11 +21,11 @@ import static org.junit.Assert.*;
  *
  * @author vuolleko
  */
-public class EvenOutJUnitTestBasic {
+public class EvenOutJUnitBasicTest {
 
     Person person;
 
-    public EvenOutJUnitTestBasic() {
+    public EvenOutJUnitBasicTest() {
     }
 
     @BeforeClass
@@ -70,7 +70,7 @@ public class EvenOutJUnitTestBasic {
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person);
-        String output = description + " " + cost + " euros, paid by " + person + "(Participants: " + participants + ")";
+        String output = description + " " + cost + " euros, paid by " + person + " (Participants: " + participants + ")";
         assertThat(payment.toString(), is(output));
     }
     
@@ -83,7 +83,7 @@ public class EvenOutJUnitTestBasic {
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person);
-        String output = description + " " + cost + " euros, paid by " + person + "(Participants: " + participants + ")";
+        String output = description + " " + cost + " euros, paid by " + person + " (Participants: " + participants + ")";
         assertThat(payment.toString(), is(output));        
     }
     

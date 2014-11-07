@@ -52,7 +52,7 @@ public class Payment {
         String output = this.description;
         output += " " + this.cost + " euros";
         output += ", paid by " + this.payer;
-        output += "(Participants: " + this.participants + ")";
+        output += " (Participants: " + this.participants + ")";
         return output;
     }
 }

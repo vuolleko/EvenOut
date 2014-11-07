@@ -22,14 +22,14 @@ import static org.junit.Assert.*;
  *
  * @author vuolleko
  */
-public class EvenOutJUnitTestGroup {
+public class EvenOutJUnitCostGroupTest {
 
     Person person;
     Person person2;
     Person person3;
     CostGroup group;
 
-    public EvenOutJUnitTestGroup() {
+    public EvenOutJUnitCostGroupTest() {
     }
 
     @BeforeClass
@@ -44,7 +44,7 @@ public class EvenOutJUnitTestGroup {
     public void setUp() {
         person = new Person("Test Person 1", "pw1");
         person2 = new Person("Test Person 2", "pw1");
-        person2 = new Person("Test Person 3", "pw1");
+        person3 = new Person("Test Person 3", "pw1");
 
         List<Person> participants = new ArrayList<Person>();
         participants.add(person);
