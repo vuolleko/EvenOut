@@ -22,7 +22,7 @@ public class main {
         Person person2 = new Person("Test Person 2", "pw1");
         Person person3 = new Person("Test Person 3", "pw1");
 
-        List<Person> participants = new ArrayList<Person>();
+        List<Person> participants = new ArrayList<>();
         participants.add(person);
         participants.add(person2);
         participants.add(person3);
@@ -40,7 +40,12 @@ public class main {
         
         System.out.println(group);
         
-        System.out.println(group.balance());
+        group.balance();
+        
+        for (Person p : participants) {
+            System.out.println(p.getDebt());
+            System.out.println(p.getCredit());
+        }
     }
     
 }

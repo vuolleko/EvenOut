@@ -5,8 +5,8 @@ package com.munfirma.evenout.common;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import com.munfirma.evenout.common.Payment;
-import com.munfirma.evenout.common.Person;
+import static com.munfirma.evenout.common.Payment.DF;
+import static com.munfirma.evenout.common.Payment.SCALE;
 import java.util.ArrayList;
 import java.util.List;
 import static org.hamcrest.CoreMatchers.*;
@@ -21,11 +21,11 @@ import static org.junit.Assert.*;
  *
  * @author vuolleko
  */
-public class EvenOutJUnitBasicTest {
+public class EvenOutJUnitPaymentTest {
 
     Person person;
 
-    public EvenOutJUnitBasicTest() {
+    public EvenOutJUnitPaymentTest() {
     }
 
     @BeforeClass
@@ -46,86 +46,70 @@ public class EvenOutJUnitBasicTest {
     @After
     public void tearDown() {
     }
-
-    @Test
-    public void newPersonVerifyName() {
-        String name = "TestPerson";
-        assertThat(person.getName(), is(name));
-        String otherName = "TestPerson2";
-        assertThat(person.getName(), is(not(otherName)));
-    }
-
-    @Test
-    public void newPersonVerifyPassword() {
-        String correctPassword = "passwort123";
-        assertThat(person.verifyPassword(correctPassword), is(true));
-        String wrongPassword = "someText";
-        assertThat(person.verifyPassword(wrongPassword), is(false));
-    }
     
     @Test
     public void newPayment1Participant() {
-        List<Person> participants = new ArrayList<Person>();
+        List<Person> participants = new ArrayList<>();
         participants.add(person);
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person);
-        String output = description + " " + cost + " euros, paid by " + person + " (Participants: " + participants + ")";
+        String output = description + " " + DF.format(cost) + " euros, paid by " + person + " (Participants: " + participants + ")";
         assertThat(payment.toString(), is(output));
     }
     
     @Test
     public void newPayment3Participants() {
-        List<Person> participants = new ArrayList<Person>();
+        List<Person> participants = new ArrayList<>();
         participants.add(person);
         participants.add(new Person("Test person 2", "pw2"));
         participants.add(new Person("Test person 3", "pw3"));
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person);
-        String output = description + " " + cost + " euros, paid by " + person + " (Participants: " + participants + ")";
+        String output = description + " " + DF.format(cost) + " euros, paid by " + person + " (Participants: " + participants + ")";
         assertThat(payment.toString(), is(output));        
     }
     
     @Test
     public void newPaymentCostForParticipant() {
-        List<Person> participants = new ArrayList<Person>();
+        List<Person> participants = new ArrayList<>();
         participants.add(person);
         participants.add(new Person("Test person 2", "pw2"));
         participants.add(new Person("Test person 3", "pw3"));
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person);
-        assertThat((int)(100*payment.getCost(person)), is(equalTo(510)));
+        assertThat(payment.getCost(person), is(equalTo((long)(cost/3*SCALE))));
     }
 
     @Test
     public void newPaymentCostForNonParticipant() {
-        List<Person> participants = new ArrayList<Person>();
+        List<Person> participants = new ArrayList<>();
         participants.add(person);
         participants.add(new Person("Test person 2", "pw2"));
         Person person3 = new Person("Test person 3", "pw3");
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person);
-        assertThat((int)payment.getCost(person3), is(equalTo(0)));
+        assertThat(payment.getCost(person3), is(equalTo((long)0)));
     }
 
     @Test
     public void newPaymentAmountParticipantPaid() {
-        List<Person> participants = new ArrayList<Person>();
+        List<Person> participants = new ArrayList<>();
         participants.add(person);
         participants.add(new Person("Test person 2", "pw2"));
         participants.add(new Person("Test person 3", "pw3"));
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person);
-        assertThat((int)(100*payment.getPaid(person)), is(equalTo(1530)));
+        assertThat(payment.getPaid(person), is(equalTo((long)(cost*SCALE))));
     }
 
     @Test
     public void newPaymentAmountParticipantPaid0() {
-        List<Person> participants = new ArrayList<Person>();
+        List<Person> participants = new ArrayList<>();
         participants.add(person);
         participants.add(new Person("Test person 2", "pw2"));
         Person person3 = new Person("Test person 3", "pw3");
@@ -133,19 +117,19 @@ public class EvenOutJUnitBasicTest {
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person);
-        assertThat((int)(100*payment.getPaid(person3)), is(equalTo(0)));
+        assertThat(payment.getPaid(person3), is(equalTo((long)0)));
     }
 
     @Test
     public void newPaymentAmountNonParticipantPaid() {
-        List<Person> participants = new ArrayList<Person>();
+        List<Person> participants = new ArrayList<>();
         participants.add(person);
         participants.add(new Person("Test person 2", "pw2"));
         Person person3 = new Person("Test person 3", "pw3");
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person3);
-        assertThat((int)(100*payment.getPaid(person3)), is(equalTo(1530)));
+        assertThat(payment.getPaid(person3), is(equalTo((long)(cost*SCALE))));
     }
     
 }

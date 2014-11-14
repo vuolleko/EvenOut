@@ -6,8 +6,9 @@
 
 package com.munfirma.evenout.common;
 
-import com.munfirma.evenout.common.Person;
-import static java.lang.Double.min;
+import static com.munfirma.evenout.common.Payment.DF;
+import static com.munfirma.evenout.common.Payment.SCALE;
+import static java.lang.Long.min;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,13 +21,13 @@ import java.util.Map;
  */
 public class CostGroup {
     private final String groupName;
-    private List<Person> persons;
-    private List<Payment> payments;
+    private final List<Person> persons;
+    private final List<Payment> payments;
     
     public CostGroup(String groupName) {
         this.groupName = groupName;
-        this.persons = new ArrayList<Person>();
-        this.payments = new ArrayList<Payment>();
+        this.persons = new ArrayList<>();
+        this.payments = new ArrayList<>();
     }
     
     public void addPerson(Person person) {
@@ -44,8 +45,8 @@ public class CostGroup {
     }
     
     // total cost for person
-    public double getCost(Person person) {
-        double cost = 0.;
+    public long getCost(Person person) {
+        long cost = 0;
         for (Payment p : this.payments) {
             cost += p.getCost(person);
         }
@@ -53,8 +54,8 @@ public class CostGroup {
     }
 
     // total paid by person
-    public double getPaid(Person person) {
-        double paid = 0.;
+    public long getPaid(Person person) {
+        long paid = 0;
         for (Payment p : this.payments) {
             paid += p.getPaid(person);
         }
@@ -70,13 +71,12 @@ public class CostGroup {
         return output;
     }
     
-    public String balance() {
-        String output = "";
-        Map<Person, Double> paidLess = new HashMap<>();
-        Map<Person, Double> paidMore = new HashMap<>();
+    public void balance() {
+        Map<Person, Long> paidLess = new HashMap<>();
+        Map<Person, Long> paidMore = new HashMap<>();
         
         for (Person p : this.persons) {
-            double debt = this.getCost(p) - this.getPaid(p);
+            long debt = this.getCost(p) - this.getPaid(p);
             if (debt > 0) {
                 paidLess.put(p, debt);
             }
@@ -88,26 +88,28 @@ public class CostGroup {
         if (paidLess.size() > 0) {
             Iterator<Person> paidLessItr = paidLess.keySet().iterator();
             Person pLess = paidLessItr.next();
-            double balanceMinus = paidLess.get(pLess);
+            long debt = paidLess.get(pLess);
             
             for (Person pMore : paidMore.keySet()) {
-                double balancePlus = paidMore.get(pMore);
-                while (balancePlus > 0.0099) {
-                    if (balanceMinus <= 0) {
+                long credit = paidMore.get(pMore);
+                while (credit > 0.01 * SCALE) {  // allows an error of 1 cent
+                    if (debt <= 0) {
+                        if (!paidLessItr.hasNext()) {
+                            System.out.println(pMore + " paid " + DF.format(credit/SCALE) 
+                                      + " euros too much.\n");
+                            break;
+                        }
                         pLess = paidLessItr.next();
-                        balanceMinus = paidLess.get(pLess);
+                        debt = paidLess.get(pLess);
                     }
                     
-                    double amount = min(balanceMinus, balancePlus);
-                    balanceMinus -= amount;
-                    balancePlus -= amount;
-//                    output += pLess + " pays " + amount + " euros to " + pMore + "\n";
-                    System.out.println(pLess + " pays " + amount + " euros to " + pMore + "\n");
-                    System.out.println(balancePlus);
+                    long amount = min(debt, credit);
+                    debt -= amount;
+                    credit -= amount;
+                    pLess.addDebt(pMore, amount);
+                    pMore.addCredit(pLess, amount);
                 }
             }
-        }
-        
-        return output;
+        }        
     }
 }
