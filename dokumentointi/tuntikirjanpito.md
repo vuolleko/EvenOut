@@ -10,3 +10,5 @@
 
 ## 7.11.2014
 * 3h koodausta ja PIT-ihmettelyä
+
+## 14.11.2014
