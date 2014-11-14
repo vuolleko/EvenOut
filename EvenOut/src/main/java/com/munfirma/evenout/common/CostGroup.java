@@ -7,8 +7,12 @@
 package com.munfirma.evenout.common;
 
 import com.munfirma.evenout.common.Person;
+import static java.lang.Double.min;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -63,6 +67,47 @@ public class CostGroup {
         for (Payment p : this.payments) {
             output += p + "\n";
         }
+        return output;
+    }
+    
+    public String balance() {
+        String output = "";
+        Map<Person, Double> paidLess = new HashMap<>();
+        Map<Person, Double> paidMore = new HashMap<>();
+        
+        for (Person p : this.persons) {
+            double debt = this.getCost(p) - this.getPaid(p);
+            if (debt > 0) {
+                paidLess.put(p, debt);
+            }
+            else if (debt < 0) {
+                paidMore.put(p, -debt);
+            }
+        }
+        
+        if (paidLess.size() > 0) {
+            Iterator<Person> paidLessItr = paidLess.keySet().iterator();
+            Person pLess = paidLessItr.next();
+            double balanceMinus = paidLess.get(pLess);
+            
+            for (Person pMore : paidMore.keySet()) {
+                double balancePlus = paidMore.get(pMore);
+                while (balancePlus > 0.0099) {
+                    if (balanceMinus <= 0) {
+                        pLess = paidLessItr.next();
+                        balanceMinus = paidLess.get(pLess);
+                    }
+                    
+                    double amount = min(balanceMinus, balancePlus);
+                    balanceMinus -= amount;
+                    balancePlus -= amount;
+//                    output += pLess + " pays " + amount + " euros to " + pMore + "\n";
+                    System.out.println(pLess + " pays " + amount + " euros to " + pMore + "\n");
+                    System.out.println(balancePlus);
+                }
+            }
+        }
+        
         return output;
     }
 }

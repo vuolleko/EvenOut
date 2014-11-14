@@ -39,6 +39,8 @@ public class main {
         group.addPayment(new Payment("Event 5", 10, participants, person));
         
         System.out.println(group);
+        
+        System.out.println(group.balance());
     }
     
 }
