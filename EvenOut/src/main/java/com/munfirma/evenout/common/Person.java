@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Instances of this class represent both users in the EvenOut system
+ * and potential participants in CostGroups.
  *
  * @author vuolleko
  */
@@ -18,16 +20,20 @@ public class Person {
 
     private final String name;
     private final String password;
-    private Map<Person, Long> debt;
-    private Map<Person, Long> credit;
+    private Map<Person, Long> balance;
 
     public Person(String name, String password) {
         this.name = name;
         this.password = password;
-        this.debt = new HashMap<>();
-        this.credit = new HashMap<>();
+        this.balance = new HashMap<>();
     }
 
+    /**
+     * Verifies a given password.
+     * 
+     * @param password
+     * @return whether password correct
+     */
     public boolean verifyPassword(String password) {
         return this.password.equals(password);
     }
@@ -36,45 +42,70 @@ public class Person {
         return this.name;
     }
 
+    /**
+     * Adds debt to another Person to the 
+     * balance of current instance.
+     * 
+     * @param another person
+     * @param amount of debt to another person (positive)
+     */
+    public void addDebt(Person person, long amount) {
+        if (this != person) {
+            long debt = -amount;
+            if (this.balance.containsKey(person)) {
+                debt += this.balance.get(person);
+            }
+            this.balance.put(person, debt);
+        }
+    }
+
+    /**
+     * Adds credit from another Person to the 
+     * balance of current instance.
+     * 
+     * @param another person
+     * @param amount of credit from another person (positive)
+     */
+    public void addCredit(Person person, long amount) {
+        this.addDebt(person, -amount);
+    }
+
+    /**
+     * 
+     * @param person
+     * @return Amount of debt to or credit from another person.
+     */
+    public long getBalance(Person person) {
+        if (this.balance.containsKey(person)) {
+            return this.balance.get(person);
+        }
+        return 0;
+    }
+
     @Override
     public String toString() {
         return this.name;
     }
-
-    public void addDebt(Person person, long amount) {
-        //TODO allow same person, balance with debt
-        this.debt.put(person, amount);
-    }
-
-    public void addCredit(Person person, long amount) {
-        //TODO allow same person, balance with debt
-        this.credit.put(person, amount);
-    }
-
-    public String getDebt() {
-        String output = this.name;
-        if (this.debt.size() > 0) {
-            output += " must pay:";
-            for (Person p : this.debt.keySet()) {
-                output += "\n    " + DF.format(this.debt.get(p) / SCALE)
-                        + " euros to " + p;
+     
+    /**
+     * 
+     * @return A string representation of the current person's balance.
+     */
+    public String balanceStr() {
+        String output = this.name + " must";
+        if (this.balance.size() > 0) {
+            for (Person p : this.balance.keySet()) {
+                long amount = this.balance.get(p);
+                if (amount > 0) {
+                    output += "\n    receive " + DF.format(amount / SCALE)
+                            + " euros from " + p;
+                } else {
+                    output += "\n    pay " + DF.format(-amount / SCALE)
+                            + " euros to " + p;
+                }
             }
         } else {
-            output += " has no debt.";
-        }
-        return output;
-    }
-
-    public String getCredit() {
-        String output = this.name;
-        if (this.credit.size() > 0) {
-            output += " must get paid:";
-            for (Person p : this.credit.keySet()) {
-                output += "\n    " + DF.format(this.credit.get(p) / SCALE)
-                        + " euros by " + p;
-            }
-        } else {
-            output += " has no credit.";
+            output += " has no debt or credit.";
         }
         return output;
     }

@@ -59,4 +59,17 @@ public class EvenOutJUnitPersonTest {
         String wrongPassword = "someText";
         assertThat(person.verifyPassword(wrongPassword), is(false));
     }
+    
+    @Test
+    public void testNoDebt() {
+        assertThat(person.getBalance(new Person("TP2", "pwd2")), is((long)0));
+    }
+    
+    @Test
+    public void testDebt() {
+        Person person2 = new Person("TestPerson 2", "pwd2");
+        person.addCredit(person2, 1000);
+        person.addDebt(person2, 3000);
+        assertThat(person.getBalance(person2), is((long) (1000-3000)));
+    }
 }

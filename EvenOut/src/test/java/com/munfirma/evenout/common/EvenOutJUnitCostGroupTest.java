@@ -28,6 +28,7 @@ public class EvenOutJUnitCostGroupTest {
     Person person;
     Person person2;
     Person person3;
+    List<Person> participants = new ArrayList<>();
     CostGroup group;
 
     public EvenOutJUnitCostGroupTest() {
@@ -47,7 +48,6 @@ public class EvenOutJUnitCostGroupTest {
         person2 = new Person("Test Person 2", "pw1");
         person3 = new Person("Test Person 3", "pw1");
 
-        List<Person> participants = new ArrayList<>();
         participants.add(person);
         participants.add(person2);
         participants.add(person3);
@@ -79,25 +79,19 @@ public class EvenOutJUnitCostGroupTest {
     public void newGroupTotalCostOfParticipant() {
         assertThat(round(group.getCost(person) * 100 / SCALE), is(round(100 * (10 + 21.5 + 10.2 + 10 + 3.2) / 3)));
     }
-    
-    @Test
-    public void balanceDebtOfParticipant() {
-        group.balance();
-        String output = "Test Person 1 has no debt.";
-        assertThat(person.getDebt(), is(output));
-    }
 
     @Test
     public void balanceCreditOfParticipant() {
         group.balance();
-        String output = "Test Person 1 must get paid:\n"
-                         + "    15.10 euros by Test Person 2\n"
-                         + "    18.30 euros by Test Person 3";
-        String output2 = "Test Person 1 must get paid:\n"
-                          + "    18.30 euros by Test Person 3\n"
-                          + "    15.10 euros by Test Person 2";
-        System.out.println(person.getCredit());
-        assertThat(person.getCredit(), anyOf(is(output),is(output2)));
+        assertThat(round(person.getBalance(person2) * 100 / SCALE), is((long) 1510));
+        assertThat(round(person.getBalance(person3) * 100 / SCALE), is((long) 1830));
+        assertThat(round(person2.getBalance(person) * 100 / SCALE), is((long) -1510));
+        assertThat(person3.getBalance(person2), is((long) 0));
     }
 
+    @Test
+    public void noNewEventsAfterGroupFinalized() {
+        group.balance();
+        assertThat(group.addPayment(new Payment("Event x", 10, participants, person)), is(false));
+    }
 }

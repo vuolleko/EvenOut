@@ -43,8 +43,7 @@ public class main {
         group.balance();
         
         for (Person p : participants) {
-            System.out.println(p.getDebt());
-            System.out.println(p.getCredit());
+            System.out.println(p.balanceStr());
         }
     }
     

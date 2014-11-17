@@ -3,22 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.munfirma.evenout.common;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
 /**
+ * Instances of this class represent single Payment events.
  *
  * @author vuolleko
  */
 public class Payment {
+
     private final String description;
     private final long cost;
     private final List<Person> participants;
     private final Person payer;
-    
+
     public static final double SCALE = 100000.;  // used for conversion of money
     public static final DecimalFormat DF = new DecimalFormat("#.00");
 
@@ -29,31 +30,37 @@ public class Payment {
         this.participants = participants;
         this.payer = payer;
     }
-    
-    // return the cost per participant
+
+    /**
+     *
+     * @param person
+     * @return cost of this event for person
+     */
     public long getCost(Person person) {
         if (this.participants.contains(person)) {
             return this.cost / this.participants.size();
-        }
-        else {
+        } else {
             return 0;
         }
     }
-    
-    // how much a person has paid for this
+
+    /**
+     *
+     * @param person
+     * @return amount paid by person for this event
+     */
     public long getPaid(Person person) {
         if (this.payer == person) {
             return this.cost;
-        }
-        else {
+        } else {
             return 0;
         }
     }
-    
+
     @Override
     public String toString() {
         String output = this.description;
-        output += " " + DF.format(this.cost/SCALE) + " euros";
+        output += " " + DF.format(this.cost / SCALE) + " euros";
         output += ", paid by " + this.payer;
         output += " (Participants: " + this.participants + ")";
         return output;
