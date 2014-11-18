@@ -40,7 +40,7 @@ public class main {
         
         System.out.println(group);
         
-        group.balance();
+        group.finalizeGroup();
         
         for (Person p : participants) {
             System.out.println(p.balanceStr());

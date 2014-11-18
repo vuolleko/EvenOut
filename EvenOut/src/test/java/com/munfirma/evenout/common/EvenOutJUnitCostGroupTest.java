@@ -82,7 +82,7 @@ public class EvenOutJUnitCostGroupTest {
 
     @Test
     public void balanceCreditOfParticipant() {
-        group.balance();
+        group.finalizeGroup();
         assertThat(round(person.getBalance(person2) * 100 / SCALE), is((long) 1510));
         assertThat(round(person.getBalance(person3) * 100 / SCALE), is((long) 1830));
         assertThat(round(person2.getBalance(person) * 100 / SCALE), is((long) -1510));
@@ -91,7 +91,7 @@ public class EvenOutJUnitCostGroupTest {
 
     @Test
     public void noNewEventsAfterGroupFinalized() {
-        group.balance();
+        group.finalizeGroup();
         assertThat(group.addPayment(new Payment("Event x", 10, participants, person)), is(false));
     }
 }

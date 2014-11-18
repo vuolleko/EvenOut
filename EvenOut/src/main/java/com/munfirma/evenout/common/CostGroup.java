@@ -113,7 +113,7 @@ public class CostGroup {
      *
      * @return Whether successful.
      */
-    public boolean balance() {
+    public boolean finalizeGroup() {
         if (this.finalized) {
             return false;  // the method has already been run!
         }
@@ -145,7 +145,7 @@ public class CostGroup {
                     if (debt <= 0) {
                         if (!paidLessItr.hasNext()) {
                             System.out.println(pMore + " paid " + DF.format(credit / SCALE)
-                                    + " euros too much.\n");
+                                               + " euros too much.\n");
                             break;
                         }
                         pLess = paidLessItr.next();
