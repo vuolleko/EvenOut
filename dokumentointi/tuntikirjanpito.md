@@ -21,3 +21,7 @@
 
 ## 18.11.2014
 * 1h GUI-toteutusta
+
+## 28.11.2014
+* 2.5h GUI-toteutusta
+* 0.5h sekvenssikaavioita
