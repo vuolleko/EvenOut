@@ -22,6 +22,8 @@ public class Person {
     private final Map<Person, Long> balance;
 
     public Person(String name) {
+        if (name.length() < 1) 
+            throw new IllegalArgumentException("No name!");
         this.name = name;
         this.balance = new HashMap<>();
     }

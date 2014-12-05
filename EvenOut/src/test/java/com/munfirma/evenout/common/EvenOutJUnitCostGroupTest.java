@@ -96,4 +96,9 @@ public class EvenOutJUnitCostGroupTest {
         group.finalizeGroup();
         assertThat(group.addPayment(new Payment("Event x", 10, participants, person)), is(false));
     }
+
+    @Test
+    public void personReferenceTest() {
+        assertThat(group.getPersonByName(person.getName()), is(person));
+    }
 }

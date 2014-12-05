@@ -24,25 +24,34 @@ public class Payment {
     public static final DecimalFormat DF = new DecimalFormat("#.00");
 
     public Payment(String description, double cost, List participants, Person payer) {
-        //TODO add check for cost >0
+        if (cost < 0) {
+            throw new IllegalArgumentException("Cost must not be negative!");
+        }
+        if (description.length() < 1) {
+            throw new IllegalArgumentException("No description!");
+        }
+        if (participants.size() < 1) {
+            throw new IllegalArgumentException("No participants!");
+        }
+
         this.description = description;
         this.cost = (long) (cost * SCALE);  // conversion to 0.1 cents!
         this.participants = participants;
         this.payer = payer;
     }
-    
+
     public String getDescription() {
         return this.description;
     }
-    
+
     public double getCost() {
         return (double) (this.cost / SCALE);
     }
-    
+
     public Person getPayer() {
         return this.payer;
     }
-    
+
     public List<Person> getParticipants() {
         return this.participants;
     }

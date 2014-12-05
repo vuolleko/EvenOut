@@ -29,6 +29,8 @@ public class CostGroup {
     private final StatusFile statusFile;
 
     public CostGroup(String groupName) throws IOException {
+        if (groupName.length() < 1) 
+            throw new IllegalArgumentException("No GroupName");
         this.finalized = false;
         this.groupName = groupName;
         this.persons = new ArrayList<>();
@@ -92,6 +94,8 @@ public class CostGroup {
      * @throws java.io.IOException
      */
     public boolean addPayment(Payment payment) throws IOException {
+        if (!this.persons.contains(payment.getPayer()))
+            throw new IllegalArgumentException("Payer not in group!");
         if (this.finalized) {
             //System.out.println("Already finalized!");
             return false;
