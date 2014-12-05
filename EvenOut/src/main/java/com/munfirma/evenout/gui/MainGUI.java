@@ -12,8 +12,11 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -37,18 +40,19 @@ public class MainGUI extends JFrame implements ActionListener {
     private JTextArea outputTextArea;
     private JScrollPane scrollPane;
     private JButton newPaymentButton;
+    private JButton finalizeButton;
     private JTextField descriptionField;
     private JTextField costField;
     private CostGroup costGroup;
     private ButtonGroup payerButtonGroup;
     private List<JCheckBox> participantCheckBoxList;
 
-    public MainGUI() {
+    public MainGUI() throws IOException {
         initGUI();
 
     }
 
-    private void initGUI() {
+    private void initGUI() throws IOException {
         paymentsPanel = new JPanel();
         paymentsPanel.setLayout(new BoxLayout(paymentsPanel, BoxLayout.Y_AXIS));
         paymentsPanel.add(newPaymentPanel());
@@ -57,6 +61,7 @@ public class MainGUI extends JFrame implements ActionListener {
         outputTextArea = new JTextArea();
         outputTextArea.setEditable(false);
         outputTextArea.setRequestFocusEnabled(false);
+        outputTextArea.setText(this.costGroup.toString());
         scrollPane = new JScrollPane(outputTextArea,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -67,7 +72,7 @@ public class MainGUI extends JFrame implements ActionListener {
 
     }
 
-    private JPanel newPaymentPanel() {
+    private JPanel newPaymentPanel() throws IOException {
         JPanel newPanel = new JPanel();
         newPanel.setLayout(new GridLayout(2, 5));
 
@@ -84,7 +89,11 @@ public class MainGUI extends JFrame implements ActionListener {
         newPanel.add(new JLabel("Cost"));
         newPanel.add(new JLabel("Paid by"));
         newPanel.add(new JLabel("Participants"));
-        newPanel.add(new JLabel());
+//        newPanel.add(new JLabel());
+
+        finalizeButton = new JButton("Finalize");
+        finalizeButton.addActionListener(this);
+        newPanel.add(finalizeButton);
 
         descriptionField = new JTextField();
         descriptionField.setMaximumSize(
@@ -129,6 +138,7 @@ public class MainGUI extends JFrame implements ActionListener {
         newPaymentButton = new JButton("Add new payment");
         newPaymentButton.addActionListener(this);
         newPanel.add(newPaymentButton);
+        
 
         return newPanel;
     }
@@ -137,7 +147,12 @@ public class MainGUI extends JFrame implements ActionListener {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                MainGUI gui = new MainGUI();
+                MainGUI gui = null;
+                try {
+                    gui = new MainGUI();
+                } catch (IOException ex) {
+                    Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 gui.setVisible(true);
             }
         });
@@ -145,6 +160,19 @@ public class MainGUI extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == newPaymentButton) {
+            try {
+                addNewPayment();
+            } catch (IOException ex) {
+                Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (e.getSource() == finalizeButton) {
+            finalizeCostGroup();
+        }
+    }
+        
+    private void addNewPayment() throws IOException {    
         String description = descriptionField.getText();
         double cost = Double.parseDouble(costField.getText());
         List<Person> allPersons = costGroup.getPersons();
@@ -163,9 +191,21 @@ public class MainGUI extends JFrame implements ActionListener {
         }
 
         Payment payment = new Payment(description, cost, participants, payer);
-//        JLabel paymentLabel = new JLabel(payment.toString());
-//        this.outputTextArea.add(paymentLabel);
-        this.outputTextArea.append(payment.toString() + "\n");
+        if (this.costGroup.addPayment(payment))
+            this.outputTextArea.append(payment.toString() + "\n");
     }
 
+    private void finalizeCostGroup() {
+        this.costGroup.finalizeGroup();
+        this.outputTextArea.append("------------------------------\n\n");
+      
+        for (Person p : this.costGroup.getPersons()) {
+            this.outputTextArea.append(p.balanceStr() + "\n");
+        }
+
+        this.finalizeButton.setEnabled(false);
+        this.newPaymentButton.setEnabled(false);
+
+    }
+    
 }

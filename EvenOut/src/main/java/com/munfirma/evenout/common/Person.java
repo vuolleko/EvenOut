@@ -100,8 +100,9 @@ public class Person {
      * @return A string representation of the current person's balance.
      */
     public String balanceStr() {
-        String output = this.name + " must";
+        String output = this.name;
         if (this.balance.size() > 0) {
+            output += " must";
             for (Person p : this.balance.keySet()) {
                 long amount = this.balance.get(p);
                 if (amount > 0) {
