@@ -7,6 +7,7 @@ package com.munfirma.evenout.common;
 
 import static com.munfirma.evenout.common.Payment.DF;
 import static com.munfirma.evenout.common.Payment.SCALE;
+import java.io.IOException;
 import static java.lang.Long.min;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,12 +26,15 @@ public class CostGroup {
     private final String groupName;
     private final List<Person> persons;
     private final List<Payment> payments;
+    private final StatusFile statusFile;
 
-    public CostGroup(String groupName) {
+    public CostGroup(String groupName) throws IOException {
         this.finalized = false;
         this.groupName = groupName;
         this.persons = new ArrayList<>();
         this.payments = new ArrayList<>();
+        this.statusFile = new StatusFile(this);
+        this.statusFile.checkOld();
     }
 
     /**
@@ -38,12 +42,14 @@ public class CostGroup {
      *
      * @param person
      * @return whether successful
+     * @throws java.io.IOException
      */
-    public boolean addPerson(Person person) {
+    public boolean addPerson(Person person) throws IOException {
         if (this.persons.contains(person)) {
             return false;
         }
         this.persons.add(person);
+        this.statusFile.addPerson(person);
         return true;
     }
 
@@ -56,17 +62,27 @@ public class CostGroup {
     }
 
     /**
+     * Returns the name of the CostGroup
+     * @return groupName
+     */
+    public String getGroupName() {
+        return this.groupName;
+    }
+
+    /**
      * Add a Payment event to CostGroup.
      *
      * @param payment
      * @return whether successful
+     * @throws java.io.IOException
      */
-    public boolean addPayment(Payment payment) {
+    public boolean addPayment(Payment payment) throws IOException {
         if (this.finalized) {
             //System.out.println("Already finalized!");
             return false;
         }
         this.payments.add(payment);
+        this.statusFile.addPayment(payment);
         return true;
     }
 
@@ -79,7 +95,7 @@ public class CostGroup {
     public long getCost(Person person) {
         long cost = 0;
         for (Payment p : this.payments) {
-            cost += p.getCost(person);
+            cost += p.getCostFor(person);
         }
         return cost;
     }
@@ -93,7 +109,7 @@ public class CostGroup {
     public long getPaid(Person person) {
         long paid = 0;
         for (Payment p : this.payments) {
-            paid += p.getPaid(person);
+            paid += p.getPaidBy(person);
         }
         return paid;
     }
@@ -145,7 +161,7 @@ public class CostGroup {
                     if (debt <= 0) {
                         if (!paidLessItr.hasNext()) {
                             System.out.println(pMore + " paid " + DF.format(credit / SCALE)
-                                               + " euros too much.\n");
+                                    + " euros too much.\n");
                             break;
                         }
                         pLess = paidLessItr.next();
@@ -161,6 +177,8 @@ public class CostGroup {
             }
         }
         this.finalized = true;
+        this.statusFile.deleteFiles();
         return true;
     }
+
 }

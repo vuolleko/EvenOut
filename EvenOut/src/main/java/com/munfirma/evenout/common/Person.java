@@ -20,12 +20,30 @@ public class Person {
 
     private final String name;
     private final String password;
-    private Map<Person, Long> balance;
+    private final Map<Person, Long> balance;
 
     public Person(String name, String password) {
         this.name = name;
         this.password = password;
         this.balance = new HashMap<>();
+    }
+    
+    /**
+     * Check for person's identity based on unique names.
+     * @param o
+     * @return whether same persons
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Person) {
+            return this.name.equals(o.toString());
+        }
+        return false;
+    }
+    
+    @Override
+    public int hashCode() {
+        return this.name.hashCode();
     }
 
     /**
@@ -46,7 +64,7 @@ public class Person {
      * Adds debt to another Person to the 
      * balance of current instance.
      * 
-     * @param another person
+     * @param person Some other person
      * @param amount of debt to another person (positive)
      */
     public void addDebt(Person person, long amount) {
@@ -63,7 +81,7 @@ public class Person {
      * Adds credit from another Person to the 
      * balance of current instance.
      * 
-     * @param another person
+     * @param person Some other person
      * @param amount of credit from another person (positive)
      */
     public void addCredit(Person person, long amount) {

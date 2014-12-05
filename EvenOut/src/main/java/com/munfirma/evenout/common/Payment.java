@@ -30,13 +30,29 @@ public class Payment {
         this.participants = participants;
         this.payer = payer;
     }
+    
+    public String getDescription() {
+        return this.description;
+    }
+    
+    public double getCost() {
+        return (double) (this.cost / SCALE);
+    }
+    
+    public Person getPayer() {
+        return this.payer;
+    }
+    
+    public List<Person> getParticipants() {
+        return this.participants;
+    }
 
     /**
      *
      * @param person
      * @return cost of this event for person
      */
-    public long getCost(Person person) {
+    public long getCostFor(Person person) {
         if (this.participants.contains(person)) {
             return this.cost / this.participants.size();
         } else {
@@ -49,7 +65,7 @@ public class Payment {
      * @param person
      * @return amount paid by person for this event
      */
-    public long getPaid(Person person) {
+    public long getPaidBy(Person person) {
         if (this.payer == person) {
             return this.cost;
         } else {

@@ -23,6 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
@@ -33,6 +34,7 @@ import javax.swing.SwingUtilities;
 public class MainGUI extends JFrame implements ActionListener {
 
     private JPanel paymentsPanel;
+    private JTextArea outputTextArea;
     private JScrollPane scrollPane;
     private JButton newPaymentButton;
     private JTextField descriptionField;
@@ -50,12 +52,16 @@ public class MainGUI extends JFrame implements ActionListener {
         paymentsPanel = new JPanel();
         paymentsPanel.setLayout(new BoxLayout(paymentsPanel, BoxLayout.Y_AXIS));
         paymentsPanel.add(newPaymentPanel());
+        add(paymentsPanel);
 
-        scrollPane = new JScrollPane(paymentsPanel,
+        outputTextArea = new JTextArea();
+        outputTextArea.setEditable(false);
+        outputTextArea.setRequestFocusEnabled(false);
+        scrollPane = new JScrollPane(outputTextArea,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-        add(scrollPane);
+        paymentsPanel.add(scrollPane);
         setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -157,8 +163,9 @@ public class MainGUI extends JFrame implements ActionListener {
         }
 
         Payment payment = new Payment(description, cost, participants, payer);
-        JLabel paymentLabel = new JLabel(payment.toString());
-        this.paymentsPanel.add(paymentLabel);
+//        JLabel paymentLabel = new JLabel(payment.toString());
+//        this.outputTextArea.add(paymentLabel);
+        this.outputTextArea.append(payment.toString() + "\n");
     }
 
 }

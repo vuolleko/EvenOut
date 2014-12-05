@@ -80,7 +80,7 @@ public class EvenOutJUnitPaymentTest {
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person);
-        assertThat(payment.getCost(person), is(equalTo((long)(cost/3*SCALE))));
+        assertThat(payment.getCostFor(person), is(equalTo((long)(cost/3*SCALE))));
     }
 
     @Test
@@ -92,7 +92,7 @@ public class EvenOutJUnitPaymentTest {
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person);
-        assertThat(payment.getCost(person3), is(equalTo((long)0)));
+        assertThat(payment.getCostFor(person3), is(equalTo((long)0)));
     }
 
     @Test
@@ -104,7 +104,7 @@ public class EvenOutJUnitPaymentTest {
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person);
-        assertThat(payment.getPaid(person), is(equalTo((long)(cost*SCALE))));
+        assertThat(payment.getPaidBy(person), is(equalTo((long)(cost*SCALE))));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class EvenOutJUnitPaymentTest {
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person);
-        assertThat(payment.getPaid(person3), is(equalTo((long)0)));
+        assertThat(payment.getPaidBy(person3), is(equalTo((long)0)));
     }
 
     @Test
@@ -129,7 +129,7 @@ public class EvenOutJUnitPaymentTest {
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person3);
-        assertThat(payment.getPaid(person3), is(equalTo((long)(cost*SCALE))));
+        assertThat(payment.getPaidBy(person3), is(equalTo((long)(cost*SCALE))));
     }
     
 }

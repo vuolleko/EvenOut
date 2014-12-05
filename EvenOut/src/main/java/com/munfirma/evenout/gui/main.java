@@ -8,6 +8,7 @@ package com.munfirma.evenout.gui;
 import com.munfirma.evenout.common.CostGroup;
 import com.munfirma.evenout.common.Payment;
 import com.munfirma.evenout.common.Person;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  */
 public class main {
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Person person = new Person("Test Person 1", "pw1");
         Person person2 = new Person("Test Person 2", "pw1");
         Person person3 = new Person("Test Person 3", "pw1");
