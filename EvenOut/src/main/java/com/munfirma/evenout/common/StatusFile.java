@@ -42,7 +42,10 @@ public class StatusFile {
     public void checkOld() throws IOException {
         if (new File(this.personsFilename).exists()) {
             this.readOldPersons();
-            this.readOldPayments();
+            
+            if (new File(this.paymentsFilename).exists()) {
+                this.readOldPayments();
+            }
         }
     }
 
@@ -103,15 +106,16 @@ public class StatusFile {
      */
     private void readOldPayments() throws FileNotFoundException, IOException {
         String inputFilename = renameOldFile(this.paymentsFilename);
+        List<Person> persons = this.costGroup.getPersons();
 
         try (Scanner input = new Scanner(new FileReader(inputFilename))) {
             while (input.hasNext()) {
                 String description = input.nextLine();
                 double cost = Double.parseDouble(input.nextLine());
-                Person payer = new Person(input.nextLine());
+                Person payer = this.costGroup.getPersonByName(input.nextLine());
                 List<Person> participants = new ArrayList<>();
                 for (String name : input.nextLine().split(";")) {
-                    participants.add(new Person(name));
+                    participants.add(this.costGroup.getPersonByName(name));
                 }
                 this.costGroup.addPayment(
                         new Payment(description, cost, participants, payer));

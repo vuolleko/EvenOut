@@ -62,7 +62,22 @@ public class CostGroup {
     }
 
     /**
+     * Return an instance of Person.
+     *
+     * @param name
+     * @return person
+     */
+    public Person getPersonByName(String name) {
+        if (!this.persons.contains(new Person(name))) {
+            return null;
+        }
+        return this.persons.get(
+                this.persons.indexOf(new Person(name)));
+    }
+
+    /**
      * Returns the name of the CostGroup
+     *
      * @return groupName
      */
     public String getGroupName() {
