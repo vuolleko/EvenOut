@@ -40,7 +40,7 @@ public class EvenOutJUnitPaymentTest {
     public void setUp() {
         String name = "TestPerson";
         String password = "passwort123";
-        person = new Person(name, password);
+        person = new Person(name);
     }
 
     @After
@@ -62,8 +62,8 @@ public class EvenOutJUnitPaymentTest {
     public void newPayment3Participants() {
         List<Person> participants = new ArrayList<>();
         participants.add(person);
-        participants.add(new Person("Test person 2", "pw2"));
-        participants.add(new Person("Test person 3", "pw3"));
+        participants.add(new Person("Test person 2"));
+        participants.add(new Person("Test person 3"));
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person);
@@ -75,8 +75,8 @@ public class EvenOutJUnitPaymentTest {
     public void newPaymentCostForParticipant() {
         List<Person> participants = new ArrayList<>();
         participants.add(person);
-        participants.add(new Person("Test person 2", "pw2"));
-        participants.add(new Person("Test person 3", "pw3"));
+        participants.add(new Person("Test person 2"));
+        participants.add(new Person("Test person 3"));
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person);
@@ -87,8 +87,8 @@ public class EvenOutJUnitPaymentTest {
     public void newPaymentCostForNonParticipant() {
         List<Person> participants = new ArrayList<>();
         participants.add(person);
-        participants.add(new Person("Test person 2", "pw2"));
-        Person person3 = new Person("Test person 3", "pw3");
+        participants.add(new Person("Test person 2"));
+        Person person3 = new Person("Test person 3");
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person);
@@ -99,8 +99,8 @@ public class EvenOutJUnitPaymentTest {
     public void newPaymentAmountParticipantPaid() {
         List<Person> participants = new ArrayList<>();
         participants.add(person);
-        participants.add(new Person("Test person 2", "pw2"));
-        participants.add(new Person("Test person 3", "pw3"));
+        participants.add(new Person("Test person 2"));
+        participants.add(new Person("Test person 3"));
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person);
@@ -111,8 +111,8 @@ public class EvenOutJUnitPaymentTest {
     public void newPaymentAmountParticipantPaid0() {
         List<Person> participants = new ArrayList<>();
         participants.add(person);
-        participants.add(new Person("Test person 2", "pw2"));
-        Person person3 = new Person("Test person 3", "pw3");
+        participants.add(new Person("Test person 2"));
+        Person person3 = new Person("Test person 3");
         participants.add(person3);
         String description = "Test case";
         double cost = 15.3;
@@ -124,8 +124,8 @@ public class EvenOutJUnitPaymentTest {
     public void newPaymentAmountNonParticipantPaid() {
         List<Person> participants = new ArrayList<>();
         participants.add(person);
-        participants.add(new Person("Test person 2", "pw2"));
-        Person person3 = new Person("Test person 3", "pw3");
+        participants.add(new Person("Test person 2"));
+        Person person3 = new Person("Test person 3");
         String description = "Test case";
         double cost = 15.3;
         Payment payment = new Payment(description, cost, participants, person3);

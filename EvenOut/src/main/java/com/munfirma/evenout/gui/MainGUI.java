@@ -71,9 +71,9 @@ public class MainGUI extends JFrame implements ActionListener {
         JPanel newPanel = new JPanel();
         newPanel.setLayout(new GridLayout(2, 5));
 
-        Person person = new Person("Test Person 1", "pw1");
-        Person person2 = new Person("Test Person 2", "pw1");
-        Person person3 = new Person("Test Person 3", "pw1");
+        Person person = new Person("Test Person 1");
+        Person person2 = new Person("Test Person 2");
+        Person person3 = new Person("Test Person 3");
 
         costGroup = new CostGroup("Cost Group 1");
         costGroup.addPerson(person);

@@ -19,9 +19,9 @@ import java.util.List;
 public class main {
     
     public static void main(String[] args) throws IOException {
-        Person person = new Person("Test Person 1", "pw1");
-        Person person2 = new Person("Test Person 2", "pw1");
-        Person person3 = new Person("Test Person 3", "pw1");
+        Person person = new Person("Test Person 1");
+        Person person2 = new Person("Test Person 2");
+        Person person3 = new Person("Test Person 3");
 
         List<Person> participants = new ArrayList<>();
         participants.add(person);

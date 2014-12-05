@@ -93,7 +93,7 @@ public class StatusFile {
         try (Scanner input = new Scanner(new FileReader(inputFilename))) {
             while (input.hasNext()) {
                 String name = input.nextLine();
-                this.costGroup.addPerson(new Person(name, "pwd"));
+                this.costGroup.addPerson(new Person(name));
             }
         }
     }
@@ -108,10 +108,10 @@ public class StatusFile {
             while (input.hasNext()) {
                 String description = input.nextLine();
                 double cost = Double.parseDouble(input.nextLine());
-                Person payer = new Person(input.nextLine(), "pwd");
+                Person payer = new Person(input.nextLine());
                 List<Person> participants = new ArrayList<>();
                 for (String name : input.nextLine().split(";")) {
-                    participants.add(new Person(name, "pwd"));
+                    participants.add(new Person(name));
                 }
                 this.costGroup.addPayment(
                         new Payment(description, cost, participants, payer));

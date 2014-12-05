@@ -36,8 +36,8 @@ public class EvenOutJUnitPersonTest {
     @Before
     public void setUp() {
         String name = "TestPerson";
-        String password = "passwort123";
-        person = new Person(name, password);
+//        String password = "passwort123";
+        person = new Person(name);
     }
     
     @After
@@ -52,22 +52,22 @@ public class EvenOutJUnitPersonTest {
         assertThat(person.getName(), is(not(otherName)));
     }
 
-    @Test
-    public void newPersonVerifyPassword() {
-        String correctPassword = "passwort123";
-        assertThat(person.verifyPassword(correctPassword), is(true));
-        String wrongPassword = "someText";
-        assertThat(person.verifyPassword(wrongPassword), is(false));
-    }
+//    @Test
+//    public void newPersonVerifyPassword() {
+//        String correctPassword = "passwort123";
+//        assertThat(person.verifyPassword(correctPassword), is(true));
+//        String wrongPassword = "someText";
+//        assertThat(person.verifyPassword(wrongPassword), is(false));
+//    }
     
     @Test
     public void testNoDebt() {
-        assertThat(person.getBalance(new Person("TP2", "pwd2")), is((long)0));
+        assertThat(person.getBalance(new Person("TP2")), is((long)0));
     }
     
     @Test
     public void testDebt() {
-        Person person2 = new Person("TestPerson 2", "pwd2");
+        Person person2 = new Person("TestPerson 2");
         person.addCredit(person2, 1000);
         person.addDebt(person2, 3000);
         assertThat(person.getBalance(person2), is((long) (1000-3000)));

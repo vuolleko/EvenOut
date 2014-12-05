@@ -45,9 +45,9 @@ public class EvenOutJUnitCostGroupTest {
 
     @Before
     public void setUp() throws IOException {
-        person = new Person("Test Person 1", "pw1");
-        person2 = new Person("Test Person 2", "pw1");
-        person3 = new Person("Test Person 3", "pw1");
+        person = new Person("Test Person 1");
+        person2 = new Person("Test Person 2");
+        person3 = new Person("Test Person 3");
 
         participants.add(person);
         participants.add(person2);
@@ -67,6 +67,7 @@ public class EvenOutJUnitCostGroupTest {
 
     @After
     public void tearDown() {
+        group.finalizeGroup();
     }
 
     @Test

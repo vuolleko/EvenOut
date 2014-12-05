@@ -19,12 +19,12 @@ import java.util.Map;
 public class Person {
 
     private final String name;
-    private final String password;
+//    private final String password;
     private final Map<Person, Long> balance;
 
-    public Person(String name, String password) {
+    public Person(String name) {
         this.name = name;
-        this.password = password;
+//        this.password = password;
         this.balance = new HashMap<>();
     }
     
@@ -46,15 +46,15 @@ public class Person {
         return this.name.hashCode();
     }
 
-    /**
-     * Verifies a given password.
-     * 
-     * @param password
-     * @return whether password correct
-     */
-    public boolean verifyPassword(String password) {
-        return this.password.equals(password);
-    }
+//    /**
+//     * Verifies a given password.
+//     * 
+//     * @param password
+//     * @return whether password correct
+//     */
+//    public boolean verifyPassword(String password) {
+//        return this.password.equals(password);
+//    }
 
     public String getName() {
         return this.name;
