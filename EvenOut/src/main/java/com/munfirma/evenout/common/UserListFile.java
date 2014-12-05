@@ -41,21 +41,25 @@ public class UserListFile {
     }
 
     /**
-     * Adds a new user to the system. UserExists should be checked first.
+     * Adds a new user to the system.
      *
      * @param username
      * @param password
+     * @return whether successful
      * @throws IOException
      */
-    public static void addUser(String username, String password) throws IOException {
-        try (Writer writer = new FileWriter(USERSFILE, true)) {
-            writer.write(username + ":" + password + "\n");
+    public static boolean addUser(String username, String password) throws IOException {
+        if (!userExists(username)) {
+            try (Writer writer = new FileWriter(USERSFILE, true)) {
+                writer.write(username + ":" + password + "\n");
+                return true;
+            }
         }
+        return false;
     }
 
     /**
-     * Checks if the username has given the correct password. UserExists should
-     * be checked first.
+     * Checks if the username has given the correct password.
      *
      * @param username
      * @param passwordTry
@@ -63,13 +67,15 @@ public class UserListFile {
      * @throws FileNotFoundException
      */
     public static boolean verifyUser(String username, String passwordTry) throws FileNotFoundException {
-        try (Scanner input = new Scanner(new FileReader(USERSFILE))) {
-            while (input.hasNext()) {
-                String line = input.nextLine();
-                int splitind = line.indexOf(':');
-                if (username.equals(line.substring(0, splitind))) {
-                    if (passwordTry.equals(line.substring(splitind + 1))) {
-                        return true;
+        if (userExists(username)) {
+            try (Scanner input = new Scanner(new FileReader(USERSFILE))) {
+                while (input.hasNext()) {
+                    String line = input.nextLine();
+                    int splitind = line.indexOf(':');
+                    if (username.equals(line.substring(0, splitind))) {
+                        if (passwordTry.equals(line.substring(splitind + 1))) {
+                            return true;
+                        }
                     }
                 }
             }
