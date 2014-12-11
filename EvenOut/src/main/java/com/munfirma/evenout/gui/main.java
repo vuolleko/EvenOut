@@ -11,6 +11,7 @@ import com.munfirma.evenout.common.Person;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFrame;
 
 /**
  *
@@ -47,7 +48,7 @@ public class main {
             System.out.println(p.balanceStr());
         }
         
-        LoginView login = new LoginView();
+        new LoginView(new JFrame("EvenOut"));
     }
     
 }

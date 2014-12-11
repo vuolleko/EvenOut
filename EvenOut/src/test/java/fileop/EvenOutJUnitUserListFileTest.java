@@ -21,7 +21,8 @@ import static org.junit.Assert.*;
  */
 public class EvenOutJUnitUserListFileTest {
     
-    String name, password;
+    String name;
+    char[] password;
 
     public EvenOutJUnitUserListFileTest() {
     }
@@ -37,7 +38,7 @@ public class EvenOutJUnitUserListFileTest {
     @Before
     public void setUp() {
         name = "TP1";
-        password = "pass1";
+        password = "pass1".toCharArray();
     }
 
     @After
@@ -52,7 +53,7 @@ public class EvenOutJUnitUserListFileTest {
 
     @Test
     public void verifyPasswordTest() throws IOException {
-        String wrongPwd = "pass2";
+        char[] wrongPwd = "pass2".toCharArray();
         assertThat(UserListFile.verifyUser(name, password), is(true));
         assertThat(UserListFile.verifyUser(name, wrongPwd), is(false));
     }
