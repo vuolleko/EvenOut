@@ -29,3 +29,6 @@
 ## 5.12.2014
 * 8h koodausta
 * 1h kaavioiden piirtelyä
+
+## 11.12.2014
+* 5.5h koodausta

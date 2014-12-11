@@ -42,6 +42,7 @@ public class PaymentGUI implements ActionListener {
     private final CostGroup costGroup;
 
     private JPanel paymentsPanel;
+    private JPanel newPaymentsPanel;
     private JTextArea outputTextArea;
     private JScrollPane scrollPane;
     private JButton newPaymentButton;
@@ -62,7 +63,7 @@ public class PaymentGUI implements ActionListener {
         } catch (IOException ex) {
             Logger.getLogger(PaymentGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         this.frame.getContentPane().removeAll();
         initGUI();
     }
@@ -70,7 +71,8 @@ public class PaymentGUI implements ActionListener {
     private void initGUI() {
         paymentsPanel = new JPanel();
         paymentsPanel.setLayout(new BoxLayout(paymentsPanel, BoxLayout.Y_AXIS));
-        paymentsPanel.add(newPaymentPanel());
+        newPaymentsPanel = newPaymentPanel();
+        paymentsPanel.add(newPaymentsPanel);
         this.frame.add(paymentsPanel);
 
         outputTextArea = new JTextArea();
@@ -95,11 +97,13 @@ public class PaymentGUI implements ActionListener {
         newPanel.add(new JLabel("Cost"));
         newPanel.add(new JLabel("Paid by"));
         newPanel.add(new JLabel("Participants"));
-//        newPanel.add(new JLabel());
 
         finalizeButton = new JButton("Finalize");
         finalizeButton.addActionListener(this);
         newPanel.add(finalizeButton);
+
+        newParticipantField = new JTextField("New participant");
+        newPanel.add(newParticipantField);
 
         descriptionField = new JTextField();
         descriptionField.setMaximumSize(
@@ -128,7 +132,9 @@ public class PaymentGUI implements ActionListener {
         for (Person p : costGroup.getPersons()) {
             JRadioButton payerButton = new JRadioButton(p.getName());
             payerButton.setActionCommand("" + ii);  // button gives index to person
-            payerButton.setSelected(true);
+            if (this.user.equals(p)) {
+                payerButton.setSelected(true);
+            }
             payerButtonGroup.add(payerButton);
             payerButtonPanel.add(payerButton);
 
@@ -146,7 +152,10 @@ public class PaymentGUI implements ActionListener {
         newPaymentButton = new JButton("Add new payment");
         newPaymentButton.addActionListener(this);
         newPanel.add(newPaymentButton);
-        
+
+        newParticipantButton = new JButton("Add new participant");
+        newParticipantButton.addActionListener(this);
+        newPanel.add(newParticipantButton);
 
         return newPanel;
     }
@@ -159,19 +168,20 @@ public class PaymentGUI implements ActionListener {
             } catch (IOException ex) {
                 Logger.getLogger(PaymentGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        if (e.getSource() == finalizeButton) {
+        } else if (e.getSource() == finalizeButton) {
             finalizeCostGroup();
+        } else if (e.getSource() == newParticipantButton) {
+            addNewParticipant();
         }
         this.frame.pack();
     }
-        
-    private void addNewPayment() throws IOException {    
+
+    private void addNewPayment() throws IOException {
         String description = descriptionField.getText();
         if (description.isEmpty()) {
             description = " ";
         }
-        double cost  = ((Number) costField.getValue()).doubleValue();
+        double cost = ((Number) costField.getValue()).doubleValue();
         if (!(cost > 0)) {
             return;
         }
@@ -191,21 +201,34 @@ public class PaymentGUI implements ActionListener {
         }
 
         Payment payment = new Payment(description, cost, participants, payer);
-        if (this.costGroup.addPayment(payment))
+        if (this.costGroup.addPayment(payment)) {
             this.outputTextArea.append(payment.toString() + "\n");
+        }
     }
 
     private void finalizeCostGroup() {
         this.costGroup.finalizeGroup();
         this.outputTextArea.append("------------------------------\n\n");
-      
+
         for (Person p : this.costGroup.getPersons()) {
             this.outputTextArea.append(p.balanceStr() + "\n");
         }
 
         this.finalizeButton.setEnabled(false);
         this.newPaymentButton.setEnabled(false);
-
     }
-    
+
+    private void addNewParticipant() {
+        String name = newParticipantField.getText();
+        if (name.isEmpty() || name.equals("New participant")) {
+            return;
+        }
+        try {
+            this.costGroup.addPerson(new Person(name));
+        } catch (IOException ex) {
+            Logger.getLogger(PaymentGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        new PaymentGUI(this.frame, this.user, this.costGroup);
+    }
+
 }
