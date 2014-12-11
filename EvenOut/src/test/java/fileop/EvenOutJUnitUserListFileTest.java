@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.munfirma.evenout.common;
+package fileop;
 
+import com.munfirma.evenout.fileop.UserListFile;
 import java.io.IOException;
 import static org.hamcrest.CoreMatchers.is;
 import org.junit.After;

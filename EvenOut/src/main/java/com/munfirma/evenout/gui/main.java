@@ -46,6 +46,8 @@ public class main {
         for (Person p : participants) {
             System.out.println(p.balanceStr());
         }
+        
+        LoginView login = new LoginView();
     }
     
 }

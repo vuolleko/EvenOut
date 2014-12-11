@@ -13,6 +13,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,6 +22,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,7 +44,7 @@ public class MainGUI extends JFrame implements ActionListener {
     private JButton newPaymentButton;
     private JButton finalizeButton;
     private JTextField descriptionField;
-    private JTextField costField;
+    private JFormattedTextField costField;
     private CostGroup costGroup;
     private ButtonGroup payerButtonGroup;
     private List<JCheckBox> participantCheckBoxList;
@@ -100,7 +102,8 @@ public class MainGUI extends JFrame implements ActionListener {
                 new Dimension(Integer.MAX_VALUE,
                         descriptionField.getPreferredSize().height));
         newPanel.add(descriptionField);
-        costField = new JTextField();
+        costField = new JFormattedTextField(NumberFormat.getNumberInstance());
+        costField.setValue(new Double(0));
         costField.setMaximumSize(
                 new Dimension(Integer.MAX_VALUE,
                         descriptionField.getPreferredSize().height));
@@ -121,6 +124,7 @@ public class MainGUI extends JFrame implements ActionListener {
         for (Person p : costGroup.getPersons()) {
             JRadioButton payerButton = new JRadioButton(p.getName());
             payerButton.setActionCommand("" + ii);  // button gives index to person
+            payerButton.setSelected(true);
             payerButtonGroup.add(payerButton);
             payerButtonPanel.add(payerButton);
 
@@ -174,7 +178,13 @@ public class MainGUI extends JFrame implements ActionListener {
         
     private void addNewPayment() throws IOException {    
         String description = descriptionField.getText();
-        double cost = Double.parseDouble(costField.getText());
+        if (description.isEmpty()) {
+            description = " ";
+        }
+        double cost  = ((Number) costField.getValue()).doubleValue();
+        if (!(cost > 0)) {
+            return;
+        }
         List<Person> allPersons = costGroup.getPersons();
         List<Person> participants = new ArrayList();
 

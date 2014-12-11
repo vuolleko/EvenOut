@@ -5,6 +5,7 @@
  */
 package com.munfirma.evenout.common;
 
+import com.munfirma.evenout.fileop.StatusFile;
 import static com.munfirma.evenout.common.Payment.DF;
 import static com.munfirma.evenout.common.Payment.SCALE;
 import java.io.IOException;

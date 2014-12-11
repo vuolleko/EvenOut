@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.munfirma.evenout.common;
+package com.munfirma.evenout.fileop;
 
+import com.munfirma.evenout.common.CostGroup;
+import com.munfirma.evenout.common.Payment;
+import com.munfirma.evenout.common.Person;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
