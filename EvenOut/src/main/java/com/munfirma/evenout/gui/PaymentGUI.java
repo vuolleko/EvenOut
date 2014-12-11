@@ -30,35 +30,48 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 /**
  *
  * @author vuolleko
  */
-public class MainGUI extends JFrame implements ActionListener {
+public class PaymentGUI implements ActionListener {
+
+    private final JFrame frame;
+    private final Person user;
+    private final CostGroup costGroup;
 
     private JPanel paymentsPanel;
     private JTextArea outputTextArea;
     private JScrollPane scrollPane;
     private JButton newPaymentButton;
     private JButton finalizeButton;
+    private JButton newParticipantButton;
     private JTextField descriptionField;
     private JFormattedTextField costField;
-    private CostGroup costGroup;
+    private JTextField newParticipantField;
     private ButtonGroup payerButtonGroup;
     private List<JCheckBox> participantCheckBoxList;
 
-    public MainGUI() throws IOException {
+    public PaymentGUI(JFrame frame, Person user, CostGroup costGroup) {
+        this.frame = frame;
+        this.user = user;
+        this.costGroup = costGroup;
+        try {
+            this.costGroup.addPerson(user);
+        } catch (IOException ex) {
+            Logger.getLogger(PaymentGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.frame.getContentPane().removeAll();
         initGUI();
-
     }
 
-    private void initGUI() throws IOException {
+    private void initGUI() {
         paymentsPanel = new JPanel();
         paymentsPanel.setLayout(new BoxLayout(paymentsPanel, BoxLayout.Y_AXIS));
         paymentsPanel.add(newPaymentPanel());
-        add(paymentsPanel);
+        this.frame.add(paymentsPanel);
 
         outputTextArea = new JTextArea();
         outputTextArea.setEditable(false);
@@ -69,23 +82,14 @@ public class MainGUI extends JFrame implements ActionListener {
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         paymentsPanel.add(scrollPane);
-        setSize(600, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.pack();
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
 
-    private JPanel newPaymentPanel() throws IOException {
+    private JPanel newPaymentPanel() {
         JPanel newPanel = new JPanel();
         newPanel.setLayout(new GridLayout(2, 5));
-
-        Person person = new Person("Test Person 1");
-        Person person2 = new Person("Test Person 2");
-        Person person3 = new Person("Test Person 3");
-
-        costGroup = new CostGroup("Cost Group 1");
-        costGroup.addPerson(person);
-        costGroup.addPerson(person2);
-        costGroup.addPerson(person3);
 
         newPanel.add(new JLabel("Description"));
         newPanel.add(new JLabel("Cost"));
@@ -147,33 +151,19 @@ public class MainGUI extends JFrame implements ActionListener {
         return newPanel;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                MainGUI gui = null;
-                try {
-                    gui = new MainGUI();
-                } catch (IOException ex) {
-                    Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                gui.setVisible(true);
-            }
-        });
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == newPaymentButton) {
             try {
                 addNewPayment();
             } catch (IOException ex) {
-                Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(PaymentGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (e.getSource() == finalizeButton) {
             finalizeCostGroup();
         }
+        this.frame.pack();
     }
         
     private void addNewPayment() throws IOException {    

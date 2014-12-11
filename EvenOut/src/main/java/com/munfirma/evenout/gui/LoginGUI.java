@@ -5,6 +5,8 @@
  */
 package com.munfirma.evenout.gui;
 
+import com.munfirma.evenout.common.CostGroup;
+import com.munfirma.evenout.common.Person;
 import com.munfirma.evenout.fileop.UserListFile;
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -25,18 +27,18 @@ import javax.swing.JTextField;
  *
  * @author vuolleko
  */
-public class LoginView implements ActionListener {
+public class LoginGUI implements ActionListener {
 
-    JFrame frame;
-    JTextField usernameField;
-    JPasswordField passwordField;
-    JButton loginButton;
-    JButton registerButton;
+    private final JFrame frame;
+    private JTextField usernameField;
+    private JPasswordField passwordField;
+    private JTextField costGroupField;
+    private JButton loginButton;
+    private JButton registerButton;
 
-    public LoginView(JFrame frame) {
-//        JFrame frame = new JFrame("Login to EvenOut");
+    public LoginGUI(JFrame frame) {
         this.frame = frame;
-        this.frame.setSize(250, 130);
+        this.frame.setSize(300, 130);
 
         JPanel panel = new JPanel();
         this.frame.add(panel);
@@ -46,11 +48,11 @@ public class LoginView implements ActionListener {
     }
 
     private void initLogin(JPanel panel) {
-        panel.setLayout(new GridLayout(3, 2));
+        panel.setLayout(new GridLayout(3, 3));
 
-        JLabel usernameLabel = new JLabel("Username");
-        panel.add(usernameLabel);
+        panel.add(new JLabel("Username"));
         panel.add(new JLabel("Password"));
+        panel.add(new JLabel("CostGroup"));
 
         usernameField = new JTextField(20);
         panel.add(usernameField);
@@ -58,6 +60,9 @@ public class LoginView implements ActionListener {
         passwordField = new JPasswordField(20);
         panel.add(passwordField);
 
+        costGroupField = new JTextField(40);
+        panel.add(costGroupField);
+        
         loginButton = new JButton("Login");
         loginButton.addActionListener(this);
         panel.add(loginButton);
@@ -65,14 +70,18 @@ public class LoginView implements ActionListener {
         registerButton = new JButton("Register");
         registerButton.addActionListener(this);
         panel.add(registerButton);
+        
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         String username = usernameField.getText();
         char[] password = passwordField.getPassword();
+        String costGroupName = costGroupField.getText();
         
-        if (username.isEmpty() || password.length == 0) {
+        if (username.isEmpty() 
+                || password.length == 0 
+                || costGroupName.isEmpty()) {
             return;
         }
 
@@ -80,7 +89,9 @@ public class LoginView implements ActionListener {
 
             if (e.getSource() == loginButton) {
                 if (UserListFile.verifyUser(username, password)) {
-                    new MainGUI().setVisible(true);
+                    new PaymentGUI(this.frame,
+                            new Person(username),
+                            new CostGroup(costGroupName));
                 } else {
                     JOptionPane.showMessageDialog(
                             (Component) loginButton, "Wrong username/password!");
@@ -97,7 +108,7 @@ public class LoginView implements ActionListener {
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(LoginView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
