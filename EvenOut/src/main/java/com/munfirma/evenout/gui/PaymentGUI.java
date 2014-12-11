@@ -216,6 +216,7 @@ public class PaymentGUI implements ActionListener {
 
         this.finalizeButton.setEnabled(false);
         this.newPaymentButton.setEnabled(false);
+        this.newParticipantButton.setEnabled(false);
     }
 
     private void addNewParticipant() {

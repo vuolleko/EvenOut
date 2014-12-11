@@ -48,7 +48,7 @@ public class CostGroup {
      * @throws java.io.IOException
      */
     public boolean addPerson(Person person) throws IOException {
-        if (this.persons.contains(person)) {
+        if (this.persons.contains(person) || this.finalized) {
             return false;
         }
         this.persons.add(person);
