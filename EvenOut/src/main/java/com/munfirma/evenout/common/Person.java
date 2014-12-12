@@ -18,12 +18,16 @@ import java.util.Map;
  */
 public class Person {
 
+    /** Name of this Person. */
     private final String name;
+    
+    /** Credit balance of this Person with respect to other Persons. */
     private final Map<Person, Long> balance;
 
     public Person(String name) {
-        if (name.length() < 1) 
+        if (name.length() < 1) {
             throw new IllegalArgumentException("No name!");
+        }
         this.name = name;
         this.balance = new HashMap<>();
     }
@@ -31,7 +35,7 @@ public class Person {
     /**
      * Check for person's identity based on unique names.
      * @param o
-     * @return whether same persons
+     * @return true if same persons
      */
     @Override
     public boolean equals(Object o) {

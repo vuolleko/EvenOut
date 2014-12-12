@@ -24,7 +24,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 /**
- *
+ * The login window.
+ * 
  * @author vuolleko
  */
 public class LoginGUI implements ActionListener {
@@ -73,6 +74,11 @@ public class LoginGUI implements ActionListener {
         
     }
 
+    /**
+     * Handle button presses and input in fields.
+     * 
+     * @param e 
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String username = usernameField.getText();

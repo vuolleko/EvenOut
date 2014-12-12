@@ -19,15 +19,23 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
+ * Instances of this class represent file handlers that take care of saving
+ * and loading payment data.
  *
  * @author vuolleko
  */
 public class StatusFile {
 
+    /** Relative path to files. */
     private static final String PATH = "data/";
 
+    /** The CostGroup related to current status files. */
     private final CostGroup costGroup;
+    
+    /** Name of the file that lists persons in CostGroup. */
     private final String personsFilename;
+    
+    /** Name of the file that lists payments in CostGroup. */
     private final String paymentsFilename;
 
     public StatusFile(CostGroup costGroup) {
@@ -83,7 +91,7 @@ public class StatusFile {
     }
 
     /**
-     * Deletes person and payment lists.
+     * Deletes person and payment files.
      */
     public void deleteFiles() {
         new File(this.personsFilename).delete();

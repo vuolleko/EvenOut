@@ -1,0 +1,4 @@
+* Testauksessa taisin toimia perinteisesti, eli ensin koodi print-varmistuksilla ja vasta lopuksi jonkinlainen automatisointi... :E
+* GUI:n testaaminen oli lukuisia manuaalisia yrityksiä ja erehdyksiä.
+* En ilmeisesti ole ihan täysin sisäistänyt mutaatiotestausta. Idea vaikuttaa kuitenkin hyödylliseltä, joten pitänee joskus perehtyä siihen tarkemmin.
+* En ymmärrä miksi PIT käyttäytyy ikään kuin StatusFilea ei testattaisi ollenkaan, kun taas Coberturan mukaan rivikattavuus on mainio. Liittyisikö siihen että luokkaa käytetään toisen luokan kautta? Joka tapauksessa tiedostojen kirjoittamisen toimiminen on helppo tarkastaa tiedostoista itsestään, ja lukemisen toimimisenhan näkee ajamalla ohjelman uudelleen.

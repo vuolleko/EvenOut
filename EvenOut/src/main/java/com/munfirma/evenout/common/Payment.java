@@ -15,13 +15,23 @@ import java.util.List;
  */
 public class Payment {
 
-    private final String description;
-    private final long cost;
-    private final List<Person> participants;
-    private final Person payer;
-
-    public static final double SCALE = 100000.;  // used for conversion of money
+    /** Scaling factor between doubles and longs to deal with currency. */
+    public static final double SCALE = 100000.;
+    
+    /** Format definition for currency. */
     public static final DecimalFormat DF = new DecimalFormat("#.00");
+
+    /** Description of this payment. */
+    private final String description;
+    
+    /** Cost of this payment, scaled by SCALE. */
+    private final long cost;
+    
+    /** List of Persons participating in the event behind this payment. */
+    private final List<Person> participants;
+    
+    /** The Person who paid for this payment. */
+    private final Person payer;
 
     public Payment(String description, double cost, List participants, Person payer) {
         if (cost < 0) {

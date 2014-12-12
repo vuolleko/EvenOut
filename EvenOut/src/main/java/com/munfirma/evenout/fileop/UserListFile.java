@@ -5,6 +5,7 @@
  */
 package com.munfirma.evenout.fileop;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -14,22 +15,28 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 /**
+ * Static methods for dealing with user authentication and registration based on
+ * a file.
  *
  * @author vuolleko
  */
 public class UserListFile {
 
+    /** Relative path to files. */
     private static final String PATH = "data/";
+    
+    /** File that lists users and their passwords in format USERNAME:PASSWORD */
     private static final String USERSFILE = PATH + "users.txt";
 
     /**
      *
      * @param username
-     * @return whether username exists in the user list file.
+     * @return true if username exists in the user list file
      * @throws FileNotFoundException
      */
     public static boolean userExists(String username) throws FileNotFoundException {
-        try (Scanner input = new Scanner(new FileReader(USERSFILE))) {
+        if (new File(USERSFILE).exists()) {
+            Scanner input = new Scanner(new FileReader(USERSFILE));
             while (input.hasNext()) {
                 String line = input.nextLine();
                 if (username.equals(line.substring(0, line.indexOf(':')))) {
@@ -45,12 +52,14 @@ public class UserListFile {
      *
      * @param username
      * @param password
-     * @return whether successful
+     * @return true if successful
      * @throws IOException
      */
     public static boolean addUser(String username, char[] password) throws IOException {
         if (!userExists(username)) {
-            try (Writer writer = new FileWriter(USERSFILE, true)) {
+            File file = new File(USERSFILE);
+            file.getParentFile().mkdirs();
+            try (Writer writer = new FileWriter(file, true)) {
                 writer.write(username + ":" + new String(password) + "\n");
                 return true;
             }
@@ -63,7 +72,7 @@ public class UserListFile {
      *
      * @param username
      * @param passwordTry
-     * @return whether password correct
+     * @return true if password correct
      * @throws FileNotFoundException
      */
     public static boolean verifyUser(String username, char[] passwordTry) throws FileNotFoundException {

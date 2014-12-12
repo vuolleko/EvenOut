@@ -9,7 +9,7 @@ import com.munfirma.evenout.fileop.StatusFile;
 import static com.munfirma.evenout.common.Payment.DF;
 import static com.munfirma.evenout.common.Payment.SCALE;
 import java.io.IOException;
-import static java.lang.Long.min;
+import static java.lang.Math.min;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,15 +23,25 @@ import java.util.Map;
  */
 public class CostGroup {
 
+    /** True if this CostGroup has been made final. */
     private boolean finalized;
+    
+    /** Name of this CostGroup. */
     private final String groupName;
+    
+    /** List of Persons participating in this CostGroup. */
     private final List<Person> persons;
+    
+    /** List of Payments in this CostGroup. */
     private final List<Payment> payments;
+    
+    /** File handler related to this CostGroup. */
     private final StatusFile statusFile;
 
     public CostGroup(String groupName) throws IOException {
-        if (groupName.length() < 1) 
+        if (groupName.length() < 1) {
             throw new IllegalArgumentException("No GroupName");
+        }
         this.finalized = false;
         this.groupName = groupName;
         this.persons = new ArrayList<>();
@@ -44,7 +54,7 @@ public class CostGroup {
      * Add a Person to CostGroup as a participant.
      *
      * @param person
-     * @return whether successful
+     * @return true if successful
      * @throws java.io.IOException
      */
     public boolean addPerson(Person person) throws IOException {
@@ -91,12 +101,13 @@ public class CostGroup {
      * Add a Payment event to CostGroup.
      *
      * @param payment
-     * @return whether successful
+     * @return true if successful
      * @throws java.io.IOException
      */
     public boolean addPayment(Payment payment) throws IOException {
-        if (!this.persons.contains(payment.getPayer()))
+        if (!this.persons.contains(payment.getPayer())) {
             throw new IllegalArgumentException("Payer not in group!");
+        }
         if (this.finalized) {
             //System.out.println("Already finalized!");
             return false;
@@ -147,7 +158,7 @@ public class CostGroup {
      * Finalize the CostGroup: calculate the final debt status between
      * participants.
      *
-     * @return Whether successful.
+     * @return true if successful
      */
     public boolean finalizeGroup() {
         if (this.finalized) {

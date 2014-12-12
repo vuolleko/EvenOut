@@ -32,6 +32,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**
+ * The main GUI that handles payments and other events related to CostGroups.
  *
  * @author vuolleko
  */
@@ -160,6 +161,11 @@ public class PaymentGUI implements ActionListener {
         return newPanel;
     }
 
+    /**
+     * Handle button presses.
+     * 
+     * @param e 
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == newPaymentButton) {

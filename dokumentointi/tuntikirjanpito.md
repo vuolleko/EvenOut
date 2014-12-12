@@ -32,3 +32,6 @@
 
 ## 11.12.2014
 * 5.5h koodausta
+
+## 12.12.2014
+* 3h testausihmettelyä
