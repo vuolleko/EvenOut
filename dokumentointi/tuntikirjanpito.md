@@ -35,3 +35,4 @@
 
 ## 12.12.2014
 * 3h testausihmettelyä
+* 1h dokumentointia
